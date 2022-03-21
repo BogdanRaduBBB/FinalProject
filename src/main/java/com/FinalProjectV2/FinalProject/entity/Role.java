@@ -3,6 +3,7 @@ package com.FinalProjectV2.FinalProject.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -18,6 +19,7 @@ public class Role {
 
     @Column(nullable = false, length = 45)
     private String name;
+
 
     public Role(String name) {
         this.name = name;
