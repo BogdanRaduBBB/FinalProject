@@ -1,6 +1,7 @@
 package com.FinalProjectV2.FinalProject.entity;
 
 
+import com.FinalProjectV2.FinalProject.dto.UserDTO;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
@@ -17,8 +18,9 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"email","username"}))
 @Entity
 public class User {
 
@@ -26,15 +28,15 @@ public class User {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String userName;
-    @Column(length = 64)
+    @Column(length = 64, nullable = false)
     private String password;
-    @Column(name = "first_name", length = 20)
+    @Column(name = "first_name", length = 20, nullable = false)
     private String firstName;
-    @Column(name = "last_name", length = 20)
+    @Column(name = "last_name", length = 20, nullable = false)
     private String lastName;
     @Column(name = "active")
     private Boolean active;
@@ -48,8 +50,7 @@ public class User {
 
     private Collection<Role> roles;
 
-    public User(Long id, String email, String userName, String password, String firstName, String lastName, Boolean active, Collection<Role> roles) {
-        this.id = id;
+    public User(String email, String userName, String password, String firstName, String lastName, Boolean active, Collection<Role> roles) {
         this.email = email;
         this.userName = userName;
         this.password = password;
@@ -59,15 +60,17 @@ public class User {
         this.roles = roles;
     }
 
-    public <T> User(String email, String userName, String password, String firstName, String lastName, Boolean active, Collection<Role> role_user) {
+
+    public User(String email, String userName, String password, String firstName, String lastName) {
         this.email = email;
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.active = true;
-        this.roles = role_user;
+    }
 
+    public Collection<Role> getRoles() {
+        return roles;
     }
 
     public void addRole(Role role) {
@@ -75,4 +78,10 @@ public class User {
     }
 
 
+    public static UserDTO convert(User user) {
+        UserDTO userDTO = new UserDTO(user.getEmail(), user.getUserName(), user.getPassword(), user.getFirstName(), user.getLastName());
+        user.setActive(true);
+        user.setRoles(Arrays.asList(new Role("ROLE_USER")));
+        return userDTO;
+    }
 }

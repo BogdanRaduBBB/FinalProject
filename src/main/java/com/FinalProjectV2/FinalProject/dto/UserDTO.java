@@ -1,12 +1,14 @@
 package com.FinalProjectV2.FinalProject.dto;
 
 import com.FinalProjectV2.FinalProject.entity.Role;
+import com.FinalProjectV2.FinalProject.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,4 +33,11 @@ public class UserDTO {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    public static UserDTO convert(User user) {
+        return new UserDTO(user.getEmail(), user.getUserName(), user.getPassword(), user.getFirstName(), user.getLastName());
+    }
 }
+
+
+
